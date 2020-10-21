@@ -4,8 +4,11 @@ import config from "./config";
 import "./App.css";
 
 function App() {
-  let configs = config;
   const [current, setWeather] = useState();
+  let configs = config;
+  let sky;
+  let temp;
+  
   let params = {
     APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f",
   };
@@ -18,7 +21,7 @@ function App() {
       .map((k) => esc(k) + "=" + esc(params[k]))
       .join("&");
 
-  console.log(params);
+ 
   // `${document.getElementById("input").value}`
 
   useEffect(() => {
@@ -33,19 +36,25 @@ function App() {
     let response = await handler.json();
     setWeather(response);
   }
-  console.log(123, current);
 
-  let sky;
+
+   function dosmth() {
+    var val = document.getElementById('input').value;
+    document.getElementById('kek').innerHTML="Вы ввели: "+val;
+};
+
+
+  // ----
+  console.log('current', current);
+ console.log('params',params);
+// ----
 
   if (typeof current !== "undefined") {
     current.weather.map((element) => (sky = element));
   }
 
-  console.log(333, current && current.weather[0].main);
 
-  console.log(sky);
 
-  let temp;
   const temperature = () => {
     temp = (current && current.main.temp) - 273.15;
   };
@@ -54,6 +63,8 @@ function App() {
     <div className="App">
       <div className="main-container">
         Введите город: <input type="text" id="input" />
+        {/* <input type="button" id="button"> submit</input> */}
+        <input type="button"value="submit" onClick={dosmth}/>
         <div className="smth">
           {current ? (
             <div>
@@ -63,8 +74,8 @@ function App() {
               градусов {temp} <br />
               облачность {current.weather[0].main} <br />
               подробная облачность {current.weather[0].description}
-              <br />
-              картинка погоды
+              <br /><div id="kek"></div>
+              картинка погоды <br />
               <img src={"http://openweathermap.org/img/wn/" + `${current.weather[0].icon}` + "@2x.png"} />
             </div>
           ) : (
@@ -72,8 +83,6 @@ function App() {
           )}
 
           <br />
-          <img src="http://openweathermap.org/img/wn/10d@2x.png" />
-          {/* погода {!!undefined && weather.weather]} */}
         </div>
       </div>
     </div>
