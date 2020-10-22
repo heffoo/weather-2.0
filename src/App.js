@@ -5,14 +5,16 @@ import "./App.css";
 
 function App() {
   const [current, setWeather] = useState();
+  const [whichCity, setCity] = useState('Krasnodar');
   let configs = config;
   let sky;
   let temp;
-  
+  let city;
+
   let params = {
     APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f",
   };
-  params = { ...params, q: "Krasnodar" };
+  params = { ...params, q: `${whichCity}`};
 
   const esc = encodeURIComponent;
   let query =
@@ -21,12 +23,23 @@ function App() {
       .map((k) => esc(k) + "=" + esc(params[k]))
       .join("&");
 
- 
-  // `${document.getElementById("input").value}`
+  const getCity = () => {
+    city = document.getElementById("input").value;
+    setCity(city);
+    console.log('getCity')
+    
+  };
 
+
+
+
+
+
+  
   useEffect(() => {
     async function test() {
       await fetcha();
+      console.log('useEffect doing')
     }
     test();
   }, []);
@@ -35,54 +48,58 @@ function App() {
     const handler = await fetch(`${configs.apiUrl}${query}`);
     let response = await handler.json();
     setWeather(response);
+    console.log('fetching')
   }
 
-
-   function dosmth() {
-    var val = document.getElementById('input').value;
-    document.getElementById('kek').innerHTML="Вы ввели: "+val;
-};
-
+  // function dosmth() {
+  //   var val = document.getElementById("input").value;
+  //   document.getElementById("kek").innerHTML = "Вы ввели: " + val;
+  // }
 
   // ----
-  console.log('current', current);
- console.log('params',params);
-// ----
+  // console.log("current", current);
+  // console.log("params", params);
+  // ----
 
   if (typeof current !== "undefined") {
     current.weather.map((element) => (sky = element));
   }
 
-
-
   const temperature = () => {
     temp = (current && current.main.temp) - 273.15;
+    console.log('temperature getting')
   };
   temperature();
   return (
     <div className="App">
       <div className="main-container">
-        Введите город: <input type="text" id="input" />
-        {/* <input type="button" id="button"> submit</input> */}
-        <input type="button"value="submit" onClick={dosmth}/>
-        <div className="smth">
+        <div className="search-place">
+          Введите город: <input type="text" className="input" id="input" />
+          {/* <input type="button" id="button"> submit</input> */}
+          <input type="button" className="button" value="submit" onClick={getCity} />{" "}
+        </div>
+
+        <div>
           {current ? (
-            <div>
+            <div className="smth">
               город: {params.q} <br />
               широта {current.coord.lon} <br />
               долгота {current.coord.lat} <br />
               градусов {temp} <br />
               облачность {current.weather[0].main} <br />
               подробная облачность {current.weather[0].description}
-              <br /><div id="kek"></div>
+              <br />
               картинка погоды <br />
-              <img src={"http://openweathermap.org/img/wn/" + `${current.weather[0].icon}` + "@2x.png"} />
+              <img
+                className="weather-img"
+                alt={current.weather[0].description}
+                src={"http://openweathermap.org/img/wn/" + `${current.weather[0].icon}` + "@2x.png"}
+              />
             </div>
           ) : (
             ""
           )}
-
-          <br />
+          <br /> <div id="kek"></div>
         </div>
       </div>
     </div>
