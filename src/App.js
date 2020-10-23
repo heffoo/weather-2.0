@@ -11,23 +11,27 @@ function App() {
   let temp;
   let city;
   let feelslike;
-  let oneday;
-  let fivedays;
+  let lon = `${current && current.coord.lon}`; //
+  console.log("lon", lon); //
+  let oneday; //
+  let fivedays; //
   const esc = encodeURIComponent;
   let params = {
     APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f",
   };
   params = { ...params, q: `${whichCity}`, lang: "ru" };
   let paramss = {
-    APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f",
-  };console.log('lonlat', `${current && current.coord.lon}`)
-  paramss = { ...paramss,lat: `${current && current.coord.lat}`,lon:`${current && current.coord.lon}`, lang: "ru" };
+    ///
+    APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f", ///
+  };
+  console.log("lonlat"); ///
+  paramss = { ...paramss, lat: `${current && current.coord.lat}`, lon: `${lon}`, lang: "ru" }; /////////////////////
 
-  let queryw =
-    "?" +
-    Object.keys(paramss)
-      .map((k) => esc(k) + "=" + esc(paramss[k]))
-      .join("&");
+  let queryw = ///
+    "?" + ///
+    Object.keys(paramss) ////
+      .map((k) => esc(k) + "=" + esc(paramss[k])) ////
+      .join("&"); /////
 
   let query =
     "?" +
