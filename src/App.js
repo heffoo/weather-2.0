@@ -4,23 +4,31 @@ import config from "./config";
 import "./App.scss";
 
 function App() {
-  const [current, setWeather] = useState();
+  const [current, setCurrent] = useState();
   const [whichCity, setCity] = useState("Краснодар");
-  const [daily, setDailyWeather] = useState()
+  const [daily, setDailyWeather] = useState();
   let configs = config;
   let temp;
   let city;
   let feelslike;
-let oneday;
-let fivedays;
-
-
+  let oneday;
+  let fivedays;
+  const esc = encodeURIComponent;
   let params = {
     APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f",
   };
-  params = { ...params, q: `${whichCity}`, lang:'ru' };
+  params = { ...params, q: `${whichCity}`, lang: "ru" };
+  let paramss = {
+    APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f",
+  };console.log('lonlat', `${current && current.coord.lon}`)
+  paramss = { ...paramss,lat: `${current && current.coord.lat}`,lon:`${current && current.coord.lon}`, lang: "ru" };
 
-  const esc = encodeURIComponent;
+  let queryw =
+    "?" +
+    Object.keys(paramss)
+      .map((k) => esc(k) + "=" + esc(paramss[k]))
+      .join("&");
+
   let query =
     "?" +
     Object.keys(params)
@@ -37,25 +45,27 @@ let fivedays;
 
   useEffect(() => {
     async function test() {
-      await fetcha();
+      setCurrent(await fetcha(`${configs.apiUrl}${query}`));
+
+      setDailyWeather(await fetcha(`${configs.apiUrlSecond}${queryw}`));
+      // https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&appid=5f892c8a0b4c47ee1b455fa5bbc9851f
       console.log("useEffect doing");
     }
     test();
   }, [whichCity]);
+  console.log("daily", daily);
+  async function fetcha(options) {
+    const handler = await fetch(options);
 
-  async function fetcha() {
-    const handler = await fetch(`${configs.apiUrl}${query}`);
     let response = await handler.json();
-    setWeather(response);
+    // setCurrent(response);
     console.log("fetching");
-    return response
+    return response;
   }
-// oneday = fetcha(configs.apiUrl)
-// fivedays = fetcha(configs.apiUrlSecond)
-  
-    const weatherChecking = () => {
+  // oneday = fetcha(configs.apiUrl)
+  // fivedays = fetcha(configs.apiUrlSecond)
 
-    }
+  const weatherChecking = () => {};
   // function dosmth() {
   //   var val = document.getElementById("input").value;
   //   document.getElementById("kek").innerHTML = "Вы ввели: " + val;
@@ -67,49 +77,49 @@ let fivedays;
   // console.log("params", params);
   // -----
 
-
   const temperature = () => {
-    temp = (current && current.main.temp)   - 273.15;
+    temp = (current && current.main.temp) - 273.15;
     feelslike = (current && current.main.feels_like) - 273.15;
     console.log("temperature converting", current && current.main.temp);
   };
 
- const dailyday = () => {
-   
- }
+  const dailyday = () => {};
   temperature();
   return (
     <div className="App">
       <div className="main-container">
         <div className="search-place">
           <input type="text" className="city-input" id="input" onKeyPress={(e) => e.key === "Enter" && getCity()} />
-
           <input type="button" className="city-button" value="&#128269;" onClick={getCity} />
-     <p>город: {params.q}</p>     {/*  CITY IS HERE */}
-                  </div>
+          <p>город: {params.q}</p> {/*  CITY IS HERE */}
+        </div>
 
         <div>
           {current ? (
             <div className="wrapper">
               <div className="main-info">
-               <div><div className="temp"> {Math.ceil(temp)}°</div> <p>По ощущениям: {Math.ceil(feelslike)}  °</p> </div>  <br />
-                
+                <div>
+                  <div className="temp"> {Math.ceil(temp)}°</div> <p>По ощущениям: {Math.ceil(feelslike)} °</p>{" "}
+                </div>{" "}
                 <br />
-                <div className="clouds"><h1> {current.weather[0].main}</h1> </div><br /> 
-               
-             
+                <br />
+                <div className="clouds">
+                  <h1> {current.weather[0].main}</h1>{" "}
+                </div>
+                <br />
                 <img
                   className="weather-img"
                   alt={current.weather[0].description}
                   src={"http://openweathermap.org/img/wn/" + `${current.weather[0].icon}` + "@2x.png"}
-                /> 
+                />
               </div>
-             <div className="coords">
+              <div className="coords">
                 широта {current.coord.lon} <br />
-                долгота {current.coord.lat}<br />
-                ветер {current.wind.speed}мс/c<br />
-                 подробная облачность: {current.weather[0].description}
-              
+                долгота {current.coord.lat}
+                <br />
+                ветер {current.wind.speed}мс/c
+                <br />
+                подробная облачность: {current.weather[0].description}
               </div>
             </div>
           ) : (
@@ -118,9 +128,7 @@ let fivedays;
           <br />
         </div>
         <input type="button" value="daily" />
-        <div className="what-weather-block">
-          
-        </div>
+        <div className="what-weather-block"></div>
       </div>
     </div>
   );
