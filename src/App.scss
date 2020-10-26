@@ -14,7 +14,7 @@
 }
 .wrapper {
   width: 650px;
-  height: 350px;
+height: 120px;
   position: relative;
 }
 .main-container {
@@ -22,6 +22,7 @@
   border-radius: 30px;
   width: 650px;
   height: 450px;
+
   // background: rgb(2, 0, 36);
   // background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(152, 152, 196, 1) 0%, rgba(0, 212, 255, 1) 100%);
 
@@ -60,10 +61,8 @@
 }
 
 .temp {
-  
-    font: {
-      size: 84px;
-    
+  font: {
+    size: 84px;
   }
 }
 .clouds {
@@ -76,16 +75,19 @@
   }
 }
 .coords {
-  bottom: 0;
-  position: absolute;
-  padding: 20px;
+  display: flex;
+  align-items: center;
 }
 // soon
-.langbtns   {
+.langbtns {
   position: absolute;
   right: 130px;
-  & button{ border: 0;
-  background-color: transparent; }
- 
-
+  & button {
+    border: 0;
+    background-color: transparent;
+  }
+}
+.down {
+  display: flex;
+  justify-content: space-between;
 }

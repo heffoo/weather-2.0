@@ -1,37 +1,35 @@
 import React, { useEffect, useState } from "react";
 import config from "./config";
+import AnotherDays from "../src/anotherdays";
 
 import "./App.scss";
 
 function App() {
   const [current, setCurrent] = useState();
   const [whichCity, setCity] = useState("Краснодар");
-  const [daily, setDailyWeather] = useState();
+  const [fivedays, setFiveDaysWeather] = useState();
   let configs = config;
   let temp;
   let city;
   let feelslike;
-  let lon = `${current && current.coord.lon}`; //
-  console.log("lon", lon); //
-  let oneday; //
-  let fivedays; //
+  let lon = `${current && current.coord.lon}`;
+  console.log("lon", lon);
+
   const esc = encodeURIComponent;
   let params = {
     APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f",
   };
   params = { ...params, q: `${whichCity}`, lang: "ru" };
-  let paramss = {
-    ///
-    APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f", ///
+  let params2 = {
+    APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f",
   };
-  console.log("lonlat"); ///
-  paramss = { ...paramss, lat: `${current && current.coord.lat}`, lon: `${lon}`, lang: "ru" }; /////////////////////
+  params2 = { ...params2, units: "metric", q: `${whichCity}`, lang: "ru" }; /////////////////////
 
-  let queryw = ///
-    "?" + ///
-    Object.keys(paramss) ////
-      .map((k) => esc(k) + "=" + esc(paramss[k])) ////
-      .join("&"); /////
+  let query2 =
+    "?" +
+    Object.keys(params2)
+      .map((k) => esc(k) + "=" + esc(params2[k]))
+      .join("&");
 
   let query =
     "?" +
@@ -51,43 +49,29 @@ function App() {
     async function test() {
       setCurrent(await fetcha(`${configs.apiUrl}${query}`));
 
-      setDailyWeather(await fetcha(`${configs.apiUrlSecond}${queryw}`));
-      // https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&appid=5f892c8a0b4c47ee1b455fa5bbc9851f
+      setFiveDaysWeather(await fetcha(`${configs.apiUrlSecond}${query2}`));
       console.log("useEffect doing");
     }
     test();
   }, [whichCity]);
-  console.log("daily", daily);
+
+  console.log("fivedays", fivedays);
+  console.log(" next day", fivedays && fivedays.list[1].clouds);
+
   async function fetcha(options) {
     const handler = await fetch(options);
-
     let response = await handler.json();
-    // setCurrent(response);
     console.log("fetching");
     return response;
   }
-  // oneday = fetcha(configs.apiUrl)
-  // fivedays = fetcha(configs.apiUrlSecond)
 
-  const weatherChecking = () => {};
-  // function dosmth() {
-  //   var val = document.getElementById("input").value;
-  //   document.getElementById("kek").innerHTML = "Вы ввели: " + val;
-  // }
-
-  // ----
   console.log("current", current);
-  // console.log('daily', daily)
-  // console.log("params", params);
-  // -----
 
   const temperature = () => {
     temp = (current && current.main.temp) - 273.15;
     feelslike = (current && current.main.feels_like) - 273.15;
-    console.log("temperature converting", current && current.main.temp);
   };
 
-  const dailyday = () => {};
   temperature();
   return (
     <div className="App">
@@ -98,9 +82,9 @@ function App() {
           <p>город: {params.q}</p> {/*  CITY IS HERE */}
         </div>
 
-        <div>
+        <div className="wrapper">
           {current ? (
-            <div className="wrapper">
+            <div>
               <div className="main-info">
                 <div>
                   <div className="temp"> {Math.ceil(temp)}°</div> <p>По ощущениям: {Math.ceil(feelslike)} °</p>{" "}
@@ -114,16 +98,8 @@ function App() {
                 <img
                   className="weather-img"
                   alt={current.weather[0].description}
-                  src={"http://openweathermap.org/img/wn/" + `${current.weather[0].icon}` + "@2x.png"}
+                  src={`http://openweathermap.org/img/wn/ ${ current.weather[0].icon} @2x.png`}
                 />
-              </div>
-              <div className="coords">
-                широта {current.coord.lon} <br />
-                долгота {current.coord.lat}
-                <br />
-                ветер {current.wind.speed}мс/c
-                <br />
-                подробная облачность: {current.weather[0].description}
               </div>
             </div>
           ) : (
@@ -131,8 +107,21 @@ function App() {
           )}
           <br />
         </div>
-        <input type="button" value="daily" />
-        <div className="what-weather-block"></div>
+        <div className="down">
+          <div className="coords">
+            широта {current && current.coord.lon} <br />
+            долгота {current && current.coord.lat}
+            <br />
+            ветер {current && current.wind.speed}мс/c
+            <br />
+            подробная облачность: {current && current.weather[0].description}
+          </div>
+          <div>
+            <button> почасовой </button>
+            <button> 5 дней назад</button>
+            <AnotherDays params={params2} temp={temp} fivedays={fivedays} />
+          </div>
+        </div>
       </div>
     </div>
   );
