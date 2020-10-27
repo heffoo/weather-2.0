@@ -1,13 +1,18 @@
 import React from "react";
-import "./anotherdays.scss";
-const Old_days = () => {
+
+import './oldforecast.scss'
+const Olddays = () => {
 
 
   return (
       
-    <section className="old-days-block">
-        
-    </section>
+    <section className="different-days-block">
+    <div className="block-scroll-wrapper">
+      <div className="block-scroll">
+          
+      </div>
+    </div>
+  </section>
   );
 };
-export default Old_days;
+export default Olddays;

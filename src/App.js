@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from "react";
 import config from "./config";
 import AnotherDays from "../src/anotherdays";
+import { Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
+import Olddays from "./container/oldforecast";
 import "./App.scss";
 
 function App() {
   const [current, setCurrent] = useState();
   const [whichCity, setCity] = useState("Краснодар");
   const [fivedays, setFiveDaysWeather] = useState();
+  const [olddays, setOldDays] = useState();
   let configs = config;
   let temp;
   let city;
   let feelslike;
   let lon = `${current && current.coord.lon}`;
-  console.log("lon", lon);
+  let lat = `${current && current.coord.lat}`;
+  const APPID = "5f892c8a0b4c47ee1b455fa5bbc9851f";
 
   const esc = encodeURIComponent;
-  let params = {
-    APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f",
-  };
-  params = { ...params, q: `${whichCity}`, lang: "ru" };
-  let params2 = {
-    APPID: "5f892c8a0b4c47ee1b455fa5bbc9851f",
-  };
-  params2 = { ...params2, units: "metric", q: `${whichCity}`, lang: "ru" }; /////////////////////
+
+  let params = { APPID, q: `${whichCity}`, lang: "ru" };
+
+  let params2 = { APPID, units: "metric", q: `${whichCity}`, lang: "ru" }; /////////////////////
+
+  let params3 = { APPID, lat, lon };
+
+  console.log(213213, lon);
 
   let query2 =
     "?" +
@@ -35,6 +40,12 @@ function App() {
     "?" +
     Object.keys(params)
       .map((k) => esc(k) + "=" + esc(params[k]))
+      .join("&");
+
+  let query3 =
+    "?" +
+    Object.keys(params3)
+      .map((k) => esc(k) + "=" + esc(params3[k]))
       .join("&");
 
   const getCity = () => {
@@ -50,7 +61,15 @@ function App() {
       setCurrent(await fetcha(`${configs.apiUrl}${query}`));
 
       setFiveDaysWeather(await fetcha(`${configs.apiUrlSecond}${query2}`));
-      console.log("useEffect doing");
+
+      setTimeout(async () => {
+        console.log(lat);
+        if (lat === "undefined" || lon === "undefined") {
+          return;
+        }
+        setOldDays(await fetcha(`${configs.apiUrlThird}${query3}`));
+        console.log("useEffect doing");
+      }, 0);
     }
     test();
   }, [whichCity]);
@@ -98,7 +117,7 @@ function App() {
                 <img
                   className="weather-img"
                   alt={current.weather[0].description}
-                  src={`http://openweathermap.org/img/wn/ ${ current.weather[0].icon} @2x.png`}
+                  src={`http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`}
                 />
               </div>
             </div>
@@ -117,9 +136,20 @@ function App() {
             подробная облачность: {current && current.weather[0].description}
           </div>
           <div>
-            <button> почасовой </button>
-            <button> 5 дней назад</button>
-            <AnotherDays params={params2} temp={temp} fivedays={fivedays} />
+            <Link to="/">
+              <button className="day-btn"> почасовой </button>
+            </Link>
+            <Link to="/old">
+              <button className="day-btn"> 5 дней назад</button>
+            </Link>
+            <Switch>
+              <Route exact path="/">
+                <AnotherDays params={params2} temp={temp} fivedays={fivedays} />
+              </Route>
+              <Route path="/old">
+                <Olddays />
+              </Route>
+            </Switch>
           </div>
         </div>
       </div>
