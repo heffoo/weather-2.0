@@ -11,13 +11,13 @@ function App() {
   const [current, setCurrent] = useState();
   const [whichCity, setCity] = useState("Краснодар");
   const [fivedays, setFiveDaysWeather] = useState();
-  const [olddays, setOldDays] = useState();
+  const [dailyWeather, setDailyWeather] = useState();
   let configs = config;
   let temp;
   let city;
   let feelslike;
-  let lon = `${current && current.coord.lon}`;
-  let lat = `${current && current.coord.lat}`;
+  let lon = current && current.coord.lon;
+  let lat = current && current.coord.lat;
   const APPID = "5f892c8a0b4c47ee1b455fa5bbc9851f";
 
   const esc = encodeURIComponent;
@@ -26,9 +26,7 @@ function App() {
 
   let params2 = { APPID, units: "metric", q: `${whichCity}`, lang: "ru" }; /////////////////////
 
-  let params3 = { APPID, lat, lon };
-
-  console.log(213213, lon);
+  let params3 = { APPID, lat, lon, units: "metric", exclude: "hourly" };
 
   let query2 =
     "?" +
@@ -50,41 +48,48 @@ function App() {
 
   const getCity = () => {
     city = document.getElementById("input").value.trim();
-    console.log("getCity");
     setCity(city);
     document.getElementById("input").value = "";
   };
-  console.log("city is - ", whichCity);
 
   useEffect(() => {
     async function test() {
-      setCurrent(await fetcha(`${configs.apiUrl}${query}`));
+      const handler = await fetcha(`${configs.apiUrl}${query}`);
+      setCurrent(handler);
 
       setFiveDaysWeather(await fetcha(`${configs.apiUrlSecond}${query2}`));
 
-      setTimeout(async () => {
-        console.log(lat);
-        if (lat === "undefined" || lon === "undefined") {
-          return;
-        }
-        setOldDays(await fetcha(`${configs.apiUrlThird}${query3}`));
-        console.log("useEffect doing");
-      }, 0);
+      lon = handler.coord.lon;
+      lat = handler.coord.lat;
+      let params3 = { APPID, lat, lon, units: "metric", exclude: "hourly" };
+      let query3 =
+        "?" +
+        Object.keys(params3)
+          .map((k) => esc(k) + "=" + esc(params3[k]))
+          .join("&");
+
+      setDailyWeather(await fetcha(`${configs.apiUrlThird}${query3}`));
     }
+
+    // setTimeout(async () => {
+
+    //   if (lat === "undefined" || lon === "undefined") {
+    //     return;
+    //   }
+    //
+    // }, 4);
+    // }
     test();
   }, [whichCity]);
-
-  console.log("fivedays", fivedays);
-  console.log(" next day", fivedays && fivedays.list[1].clouds);
+  console.log('dailyweather APP', dailyWeather);
+  console.log(123, dailyWeather && dailyWeather.daily[0].dt);
+  
 
   async function fetcha(options) {
     const handler = await fetch(options);
     let response = await handler.json();
-    console.log("fetching");
     return response;
   }
-
-  console.log("current", current);
 
   const temperature = () => {
     temp = (current && current.main.temp) - 273.15;
@@ -136,18 +141,20 @@ function App() {
             подробная облачность: {current && current.weather[0].description}
           </div>
           <div>
-            <Link to="/">
-              <button className="day-btn"> почасовой </button>
-            </Link>
-            <Link to="/old">
-              <button className="day-btn"> 5 дней назад</button>
-            </Link>
+            <div className="btn-wrapper">
+              <Link to="/" className="day-btn">
+                <p>почасовой </p>
+              </Link>
+              <Link to="/old" className="day-btn">
+                <p>по дням </p>
+              </Link>
+            </div>
             <Switch>
               <Route exact path="/">
                 <AnotherDays params={params2} temp={temp} fivedays={fivedays} />
               </Route>
               <Route path="/old">
-                <Olddays />
+                <Olddays dailyweather={dailyWeather}/>
               </Route>
             </Switch>
           </div>
@@ -166,7 +173,7 @@ export default App;
 
 // }, [weathercity])
 
-// const fetchQuotes = () => {
+// const fetchQuotes = () => {]
 //   setFething(true)
 //   fetch(`${configs.apiUrl}${query}`)
 //       .then((response) => response.json())
@@ -179,7 +186,11 @@ export default App;
 // }
 
 // ---------------------------------------------------------
-
+// let date = new Date();
+// const currentDay = date.getDate();
+// const prevDay = currentDay;
+// date = date.setDate(prevDay);
+// console.log(new Date(date));
 // config = {
 //   apikey: huigrehghehips57887
 //   apiUrl: https openweather
