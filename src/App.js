@@ -3,6 +3,8 @@ import config from "./config";
 import AnotherDays from "../src/anotherdays";
 import { Link } from "react-router-dom";
 import { Switch, Route } from "react-router-dom";
+import { css } from "@emotion/core";
+import SyncLoader from "react-spinners/SyncLoader";
 
 import Olddays from "./container/oldforecast";
 import "./App.scss";
@@ -12,21 +14,21 @@ function App() {
   const [whichCity, setCity] = useState("Краснодар");
   const [fivedays, setFiveDaysWeather] = useState();
   const [dailyWeather, setDailyWeather] = useState();
+  const [loading, setLoading] = useState(true);
   let configs = config;
   let temp;
   let city;
-  let feelslike;
-  let lon = current && current.coord.lon;
-  let lat = current && current.coord.lat;
+  let lon = current && current.lon;
+  let lat = current && current.lat;
   const APPID = "5f892c8a0b4c47ee1b455fa5bbc9851f";
 
   const esc = encodeURIComponent;
 
-  let params = { APPID, q: `${whichCity}`, lang: "ru" };
+  let params = { APPID, q: `${whichCity}`, units: "metric", lang: "ru" };
 
   let params2 = { APPID, units: "metric", q: `${whichCity}`, lang: "ru" }; /////////////////////
 
-  let params3 = { APPID, lat, lon, units: "metric", exclude: "hourly" };
+  // let params3 = { APPID, lat, lon, units: "metric", exclude: "hourly" };
 
   let query2 =
     "?" +
@@ -40,63 +42,76 @@ function App() {
       .map((k) => esc(k) + "=" + esc(params[k]))
       .join("&");
 
-  let query3 =
-    "?" +
-    Object.keys(params3)
-      .map((k) => esc(k) + "=" + esc(params3[k]))
-      .join("&");
+  // let query3 =
+  //   "?" +
+  //   Object.keys(params3)
+  //     .map((k) => esc(k) + "=" + esc(params3[k]))
+  //     .join("&");
 
   const getCity = () => {
     city = document.getElementById("input").value.trim();
+
     setCity(city);
+
     document.getElementById("input").value = "";
   };
 
   useEffect(() => {
     async function test() {
+      // const checking = await fetcha(`${configs.apiUrl}${query}`);
+
       const handler = await fetcha(`${configs.apiUrl}${query}`);
-      setCurrent(handler);
+      console.log(handler);
+      if (!handler) {
+        return;
+      } else {
+        console.log(132);
+        setCurrent(handler);
+        setFiveDaysWeather(await fetcha(`${configs.apiUrlSecond}${query2}`));
 
-      setFiveDaysWeather(await fetcha(`${configs.apiUrlSecond}${query2}`));
+        lon = handler.coord.lon;
+        lat = handler.coord.lat;
+        let params3 = { APPID, lat, lon, units: "metric", exclude: "hourly" };
+        let query3 =
+          "?" +
+          Object.keys(params3)
+            .map((k) => esc(k) + "=" + esc(params3[k]))
+            .join("&");
 
-      lon = handler.coord.lon;
-      lat = handler.coord.lat;
-      let params3 = { APPID, lat, lon, units: "metric", exclude: "hourly" };
-      let query3 =
-        "?" +
-        Object.keys(params3)
-          .map((k) => esc(k) + "=" + esc(params3[k]))
-          .join("&");
+        const awd = await fetcha(`${configs.apiUrlThird}${query3}`);
+        // console.log(awd);
 
-      setDailyWeather(await fetcha(`${configs.apiUrlThird}${query3}`));
+        const awd2 = JSON.stringify(awd);
+
+        if (!dailyWeather) {
+          setDailyWeather(JSON.parse(awd2));
+        }
+      }
     }
 
-    // setTimeout(async () => {
-
-    //   if (lat === "undefined" || lon === "undefined") {
-    //     return;
-    //   }
-    //
-    // }, 4);
-    // }
     test();
   }, [whichCity]);
-  console.log('dailyweather APP', dailyWeather);
-  console.log(123, dailyWeather && dailyWeather.daily[0].dt);
-  
 
   async function fetcha(options) {
-    const handler = await fetch(options);
-    let response = await handler.json();
-    return response;
+    setLoading(true);
+
+    const resp = await fetch(options)
+    if (!resp.ok) {
+      console.log(resp);
+      setLoading(false);
+      return false;
+    }
+
+    setLoading(false);
+    const json = await resp.json();
+    return json;
   }
+  const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+  `;
 
-  const temperature = () => {
-    temp = (current && current.main.temp) - 273.15;
-    feelslike = (current && current.main.feels_like) - 273.15;
-  };
-
-  temperature();
   return (
     <div className="App">
       <div className="main-container">
@@ -104,6 +119,9 @@ function App() {
           <input type="text" className="city-input" id="input" onKeyPress={(e) => e.key === "Enter" && getCity()} />
           <input type="button" className="city-button" value="&#128269;" onClick={getCity} />
           <p>город: {params.q}</p> {/*  CITY IS HERE */}
+          <div className={loading ? "sweet-loading-show" : "sweet-loading"}>
+            <SyncLoader css={override} size={10} color={"#ffffff"} />
+          </div>
         </div>
 
         <div className="wrapper">
@@ -111,8 +129,9 @@ function App() {
             <div>
               <div className="main-info">
                 <div>
-                  <div className="temp"> {Math.ceil(temp)}°</div> <p>По ощущениям: {Math.ceil(feelslike)} °</p>{" "}
-                </div>{" "}
+                  <div className="temp"> {Math.ceil(current.main.temp)}°</div>{" "}
+                  <p>По ощущениям: {Math.ceil(current.main.feels_like)} °</p>{" "}
+                </div>
                 <br />
                 <br />
                 <div className="clouds">
@@ -154,7 +173,7 @@ function App() {
                 <AnotherDays params={params2} temp={temp} fivedays={fivedays} />
               </Route>
               <Route path="/old">
-                <Olddays dailyweather={dailyWeather}/>
+                <Olddays dailyweather={dailyWeather} />
               </Route>
             </Switch>
           </div>

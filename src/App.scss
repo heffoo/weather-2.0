@@ -5,6 +5,7 @@
   font-weight: 300;
 }
 .search-place {
+  position: relative;
   margin: 20px;
   display: flex;
   & p {
@@ -49,6 +50,7 @@ height: 90px;
   border-radius: 30px;
   height: 30px;
   color: black;
+  padding-left: 15px;
 }
 .city-button {
   margin-left: 15px;
@@ -77,6 +79,7 @@ height: 90px;
 .coords {
   display: flex;
   align-items: center;
+  padding-left: 20px;
 }
 // soon
 .langbtns {
@@ -105,4 +108,13 @@ height: 90px;
 .btn-wrapper {
   padding: 45px 0 5px 0;
   display: flex;
+}
+.sweet-loading {
+  display: none;
+  
+}
+.sweet-loading-show {
+  display: block;
+  position: absolute;
+  right: 0;
 }
