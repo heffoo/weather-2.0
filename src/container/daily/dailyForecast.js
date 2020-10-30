@@ -1,30 +1,7 @@
 import React from "react";
 
-import "./oldforecast.scss";
-const Olddays = ({ dailyweather }) => {
-  //   const [weatherInfo, setWeatherInfo] = useState([]);
-  // useEffect(() => {
-  //   console.log(daily)
-  //  const info =  daily &&
-  //   daily.daily.map((elem) => {
-  //     console.log(elem)
-  //     return {
-  //       dt: elem.dt,
-  //       dew_point: elem.dew_point,
-  //       weather: { ...elem.weather[0] },
-  //     };
-
-  //   })
-  //   setWeatherInfo(info)
-  //   console.log(info);
-  // }, [])
-
-  // const info = daily &&
-
-  // console.log(444, dailyweather && dailyweather.daily[0].weather[0])
-
-  const dateFormat = require("dateformat");
-
+import "./dailyForecast.scss";
+const DailyForecast = ({ dailyweather }) => {
   return (
     <section className="different-days-block">
       <div className="block-scroll-wrapper">
@@ -33,7 +10,12 @@ const Olddays = ({ dailyweather }) => {
             dailyweather.daily.map((day) => (
               <div key={day.dt} className="day-block">
                 <div>
-                  <p>{dateFormat(new Date(day.dt * 1000).toGMTString(), "dddd, mmmm dS")}</p>
+                  <p>
+                    {new Date(day.dt * 1000).toLocaleString("ru", {
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
                   <p>{Math.ceil(`${day.temp.day}`)}°</p>
                 </div>
                 <img
@@ -48,7 +30,7 @@ const Olddays = ({ dailyweather }) => {
     </section>
   );
 };
-export default Olddays;
+export default DailyForecast;
 
 //
 

@@ -1,0 +1,141 @@
+.search-place {
+  position: relative;
+  margin: 20px;
+  display: flex;
+  & p {
+    margin-left: 60px;
+    font-size: 24px;
+  }
+}
+.wrapper {
+  width: 650px;
+  height: 90px;
+  position: relative;
+}
+.main-container {
+  border: 6px solid rgb(172, 95, 95);
+  border-radius: 30px;
+  width: 650px;
+  height: 450px;
+  overflow: hidden;
+  margin: 0 auto;
+  // background: rgb(2, 0, 36);
+  // background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(152, 152, 196, 1) 0%, rgba(0, 212, 255, 1) 100%);
+
+  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(188, 188, 222, 1) 0%, rgba(0, 212, 255, 1) 100%);
+}
+.main-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.weather-img {
+  width: 120px;
+  height: 120px;
+}
+.weatherInfo {
+  display: flex;
+}
+.city-input {
+  margin-left: 30px;
+  outline: 0;
+  border: 0;
+  box-shadow: 0 0 3px 2px lightgray;
+  width: 200px;
+  border-radius: 30px;
+  height: 30px;
+  color: black;
+  padding-left: 15px;
+}
+.city-button {
+  cursor: pointer;
+  margin-left: 15px;
+  height: 30px;
+  width: 30px;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  border-radius: 15px;
+}
+
+.temp {
+  font: {
+    size: 84px;
+  }
+}
+.clouds {
+  & h1 {
+    font: {
+      margin-left: 10px;
+      size: 34px;
+      weight: unset;
+    }
+  }
+}
+.coords {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}
+// soon
+.langbtns {
+  position: absolute;
+  right: 130px;
+  & button {
+    border: 0;
+    background-color: transparent;
+  }
+}
+.down {
+  display: flex;
+  justify-content: space-between;
+}
+
+.day-btn {
+  background-color: transparent;
+  border: 0;
+
+  padding: 5px 27px;
+  text-decoration: none;
+
+  border-bottom: 1px solid white;
+
+  font: {
+    size: 16px;
+  }
+}
+.day-btn:first-child {
+  margin: 0 0 0 0;
+  margin-bottom: -2px;
+}
+.day-btn:nth-child(2) {
+  margin-bottom: -2px;
+}
+.active {
+  // text-decoration: underline;
+
+  border: {
+    top: 1px solid white;
+    left: 1px solid white;
+    right: 1px solid white;
+    bottom: none;
+  }
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  // text-shadow: 0px 0px 10px rgba(90, 90, 90, 1);
+}
+.btn-wrapper {
+  padding: 45px 0 0 0;
+  display: flex;
+}
+.sweet-loading {
+  display: none;
+}
+.sweet-loading-show {
+  display: block;
+  position: absolute;
+  right: 0;
+}
+.clouds {
+  text-align: center;
+}

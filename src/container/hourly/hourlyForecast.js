@@ -1,7 +1,7 @@
 import React from "react";
-import "./anotherdays.scss";
-const AnotherDays = ({ params, fivedays }) => {
 
+import "./hourlyForecast.scss";
+const HourlyForecast = ({ fivedays }) => {
   return (
     <section className="different-days-block">
       <div className="block-scroll-wrapper">
@@ -10,13 +10,19 @@ const AnotherDays = ({ params, fivedays }) => {
             fivedays.list.map((day) => (
               <div key={day.dt} className="day-block">
                 <div>
-                  <p>{day.dt_txt}</p>
+                  <p>
+                    {new Date(day.dt * 1000).toLocaleString("ru", {
+                      month: "long",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                    })}
+                  </p>
                   <p>{Math.ceil(`${day.main.temp}`)}°</p>
                 </div>
                 <img
                   alt=""
                   className="weather-block-img"
-                  //   alt={fivedays.list[0].weather.description}
                   src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
                 />
               </div>
@@ -26,4 +32,4 @@ const AnotherDays = ({ params, fivedays }) => {
     </section>
   );
 };
-export default AnotherDays;
+export default HourlyForecast;

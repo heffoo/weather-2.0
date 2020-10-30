@@ -1,7 +1,6 @@
 .different-days-block {
   width: 260px;
   height: 240px;
-  
 }
 ::-webkit-scrollbar {
   width: 0;
@@ -10,21 +9,23 @@
   width: 260px;
   height: 55px;
   border: {
-      left: 1px solid white;
-      bottom: 1px solid white;
-  } 
+    left: 1px solid white;
+    bottom: 1px solid white;
+  }
   border-radius: 8px;
   display: flex;
   justify-content: space-around;
+  &:first-child {
+    border-radius: 0 0 0 8px;
+    margin-top: 2px;
+  }
 }
 .weather-block-img {
   height: 60px;
   width: 60px;
 }
 .block-scroll-wrapper {
-  width: calc(100% - 16px);
-  margin: 0 6px;
-  
+  width: calc(100% - 10px);
 }
 .block-scroll {
   max-height: 240px;
