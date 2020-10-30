@@ -61,11 +61,10 @@ function App() {
       // const checking = await fetcha(`${configs.apiUrl}${query}`);
 
       const handler = await fetcha(`${configs.apiUrl}${query}`);
-      console.log(handler);
       if (!handler) {
+        alert("type a correct city");
         return;
       } else {
-        console.log(132);
         setCurrent(handler);
         setFiveDaysWeather(await fetcha(`${configs.apiUrlSecond}${query2}`));
 
@@ -95,7 +94,7 @@ function App() {
   async function fetcha(options) {
     setLoading(true);
 
-    const resp = await fetch(options)
+    const resp = await fetch(options);
     if (!resp.ok) {
       console.log(resp);
       setLoading(false);
@@ -111,7 +110,21 @@ function App() {
     margin: 0 auto;
     border-color: red;
   `;
-  console.log(current);
+  let clouds;
+  const translateClouds = () => {
+    let mainClouds = current && current.weather[0].main;
+    if (mainClouds === "Clouds") {
+      clouds = "Облачно";
+    } else if (mainClouds === "Rain") {
+      clouds = "Дождь";
+    } else if (mainClouds === "Clear") {
+      clouds = "Солнечно";
+    } else {
+      clouds = mainClouds;
+    }
+  };
+  translateClouds();
+
   return (
     <div className="App">
       <div className="main-container">
@@ -135,7 +148,7 @@ function App() {
                 <br />
                 <br />
                 <div className="clouds">
-                  <h1> {current.weather[0].main}</h1>{" "}
+                  <h1> {clouds}</h1>{" "}
                 </div>
                 <br />
                 <img
@@ -165,7 +178,7 @@ function App() {
                 почасовой
               </NavLink>
               <NavLink to="/old" activeClassName="active" className="day-btn">
-              по дням 
+                по дням
               </NavLink>
             </div>
             <Switch>

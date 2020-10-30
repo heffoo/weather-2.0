@@ -25,7 +25,6 @@ const Olddays = ({ dailyweather }) => {
 
   const dateFormat = require("dateformat");
 
-
   return (
     <section className="different-days-block">
       <div className="block-scroll-wrapper">
@@ -35,7 +34,7 @@ const Olddays = ({ dailyweather }) => {
               <div key={day.dt} className="day-block">
                 <div>
                   <p>{dateFormat(new Date(day.dt * 1000).toGMTString(), "dddd, mmmm dS")}</p>
-                  <p>{Math.ceil(`${day.dew_point}`)}°</p>
+                  <p>{Math.ceil(`${day.temp.day}`)}°</p>
                 </div>
                 <img
                   className="weather-block-img"
