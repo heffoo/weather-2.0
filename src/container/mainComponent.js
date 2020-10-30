@@ -109,6 +109,8 @@ const Container = () => {
       clouds = "Туман";
     } else if (mainClouds === "Drizzle") {
       clouds = "Морось";
+    } else if (mainClouds === "Snow") {
+      clouds = "Снег";
     } else {
       clouds = mainClouds;
     }

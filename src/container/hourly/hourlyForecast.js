@@ -14,11 +14,18 @@ const HourlyForecast = ({ fivedays }) => {
                     {new Date(day.dt * 1000).toLocaleString("ru", {
                       month: "long",
                       day: "numeric",
-                      hour: "numeric",
-                      minute: "numeric",
                     })}
                   </p>
-                  <p>{Math.ceil(`${day.main.temp}`)}°</p>
+                  {Math.ceil(`${day.main.temp}`)}°
+                    </div>
+                    <div></div>
+                    <div>
+                    <p>
+                    {new Date(day.dt * 1000).toLocaleString("ru", {
+                      hour: "numeric",
+                      minute: "numeric",
+                    })}</p> 
+                  
                 </div>
                 <img
                   alt=""

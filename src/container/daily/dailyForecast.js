@@ -8,7 +8,7 @@ const DailyForecast = ({ dailyweather }) => {
         <div className="block-scroll">
           {dailyweather &&
             dailyweather.daily.map((day) => (
-              <div key={day.dt} className="day-block">
+              <div key={day.dt} className="day-block2">
                 <div>
                   <p>
                     {new Date(day.dt * 1000).toLocaleString("ru", {
@@ -18,6 +18,9 @@ const DailyForecast = ({ dailyweather }) => {
                   </p>
                   <p>{Math.ceil(`${day.temp.day}`)}°</p>
                 </div>
+                <div>  <p>
+                   
+                  </p></div>
                 <img
                   className="weather-block-img"
                   alt=""
