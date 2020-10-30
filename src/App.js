@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import config from "./config";
 import AnotherDays from "../src/anotherdays";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Switch, Route } from "react-router-dom";
 import { css } from "@emotion/core";
 import SyncLoader from "react-spinners/SyncLoader";
@@ -111,14 +111,14 @@ function App() {
     margin: 0 auto;
     border-color: red;
   `;
-
+  console.log(current);
   return (
     <div className="App">
       <div className="main-container">
         <div className="search-place">
           <input type="text" className="city-input" id="input" onKeyPress={(e) => e.key === "Enter" && getCity()} />
           <input type="button" className="city-button" value="&#128269;" onClick={getCity} />
-          <p>город: {params.q}</p> {/*  CITY IS HERE */}
+          <p>город: {current && current.name}</p> {/*  CITY IS HERE */}
           <div className={loading ? "sweet-loading-show" : "sweet-loading"}>
             <SyncLoader css={override} size={10} color={"#ffffff"} />
           </div>
@@ -161,12 +161,12 @@ function App() {
           </div>
           <div>
             <div className="btn-wrapper">
-              <Link to="/" className="day-btn">
-                <p>почасовой </p>
-              </Link>
-              <Link to="/old" className="day-btn">
-                <p>по дням </p>
-              </Link>
+              <NavLink exact to="/" activeClassName="active" className="day-btn">
+                почасовой
+              </NavLink>
+              <NavLink to="/old" activeClassName="active" className="day-btn">
+              по дням 
+              </NavLink>
             </div>
             <Switch>
               <Route exact path="/">

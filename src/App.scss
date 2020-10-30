@@ -15,7 +15,7 @@
 }
 .wrapper {
   width: 650px;
-height: 90px;
+  height: 90px;
   position: relative;
 }
 .main-container {
@@ -99,11 +99,14 @@ height: 90px;
   background-color: transparent;
   border: 0;
   margin: 0 10px;
-  
+  text-decoration: none;
   font: {
     size: 16px;
-
   }
+}
+.active {
+  text-decoration: underline;
+  // color: yellow;
 }
 .btn-wrapper {
   padding: 45px 0 5px 0;
@@ -111,7 +114,6 @@ height: 90px;
 }
 .sweet-loading {
   display: none;
-  
 }
 .sweet-loading-show {
   display: block;
