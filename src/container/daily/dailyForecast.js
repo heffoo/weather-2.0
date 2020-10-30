@@ -21,7 +21,7 @@ const DailyForecast = ({ dailyweather }) => {
                 <img
                   className="weather-block-img"
                   alt=""
-                  src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
+                  src={`https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
                 />
               </div>
             ))}

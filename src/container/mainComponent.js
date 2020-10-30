@@ -158,7 +158,7 @@ const Container = () => {
           </div>
           <div>
             <div className="btn-wrapper">
-              <NavLink exact to="/" activeClassName="active" className="day-btn">
+              <NavLink to="/weather" activeClassName="active" className="day-btn">
                 почасовой
               </NavLink>
               <NavLink to="/old" activeClassName="active" className="day-btn">
@@ -166,7 +166,7 @@ const Container = () => {
               </NavLink>
             </div>
             <Switch>
-              <Route exact path="/">
+              <Route exact path="/weather">
                 <HourlyForecast params={params2} temp={temp} fivedays={fivedays} />
               </Route>
               <Route path="/old">
