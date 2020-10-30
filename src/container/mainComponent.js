@@ -103,6 +103,12 @@ const Container = () => {
       clouds = "Дождь";
     } else if (mainClouds === "Clear") {
       clouds = "Солнечно";
+    } else if (mainClouds === "Smoke") {
+      clouds = "Дымка";
+    } else if (mainClouds === "Mist") {
+      clouds = "Туман";
+    } else if (mainClouds === "Drizzle") {
+      clouds = "Морось";
     } else {
       clouds = mainClouds;
     }
@@ -132,7 +138,7 @@ const Container = () => {
                 <br />
                 <div className="clouds">
                   <h1> {clouds}</h1>
-                 <p> {current && current.weather[0].description} </p>
+                  <p> {current && current.weather[0].description} </p>
                 </div>
                 <br />
                 <img
@@ -154,11 +160,10 @@ const Container = () => {
             <br />
             ветер {current && current.wind.speed}мс/c
             <br />
-            
           </div>
           <div>
             <div className="btn-wrapper">
-              <NavLink to="/weather" activeClassName="active" className="day-btn">
+              <NavLink exact to="/" activeClassName="active" className="day-btn">
                 почасовой
               </NavLink>
               <NavLink to="/old" activeClassName="active" className="day-btn">
@@ -166,7 +171,7 @@ const Container = () => {
               </NavLink>
             </div>
             <Switch>
-              <Route exact path="/weather">
+              <Route exact path="/">
                 <HourlyForecast params={params2} temp={temp} fivedays={fivedays} />
               </Route>
               <Route path="/old">
