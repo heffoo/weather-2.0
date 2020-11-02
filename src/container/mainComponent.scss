@@ -56,6 +56,10 @@
   outline: 0;
   border: 0;
   border-radius: 15px;
+  &:hover {
+    transform: scale(1.2);
+    transition: all 0.2s;
+  }
 }
 
 .temp {
