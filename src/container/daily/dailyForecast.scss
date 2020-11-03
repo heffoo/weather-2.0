@@ -1,8 +1,0 @@
-@import "../hourly/hourlyForecast.scss";
-
-.day-block2 {
-  @extend .day-block;
-  justify-content: space-between;
-  padding: 0 10px 0 10px;
-  box-sizing: border-box;
-}
