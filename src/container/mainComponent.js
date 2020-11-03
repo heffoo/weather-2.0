@@ -9,113 +9,119 @@ import { translateClouds } from "../utils";
 
 import "../container/mainComponent.scss";
 
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
+const initState = { dayInfo: {}, hourlyInfo: {}, dailyInfo: {} };
 const Container = () => {
-  const [current, setCurrent] = useState();
   const [whichCity, setCity] = useState(defaultCity);
-  const [fivedays, setFiveDaysWeather] = useState([]);
-  const [dailyWeather, setDailyWeather] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [weatherInfo, setAllWeather] = useState(initState);
 
-  const getCity = () => {
-    let city = document.getElementById("input").value.trim();
+  const onSubmitCity = (e) => {
+    e.preventDefault();
+    const form = document.forms.searchCity;
+    setCity(form.elements.cityInput.value);
 
-    setCity(city);
-
-    document.getElementById("input").value = "";
+    form.elements.cityInput.value = "";
   };
-
+  console.log(whichCity);
   useEffect(() => {
     async function test() {
-      const dayResponse = await WeatherService.getByDay(whichCity);
-      setLoading(true);
-      if (!dayResponse) {
-        setLoading(false);
-        alert("type a correct city");
+      try {
+        const currentCityWeather = await WeatherService.getAll(whichCity);
+
+        setAllWeather(currentCityWeather);
+      } catch (e) {
+        alert("123");
         return;
       }
-      setCurrent(dayResponse);
-      const hourlyResponse = await WeatherService.getByHourly(whichCity);
-      setFiveDaysWeather(hourlyResponse);
 
-      if (!dailyWeather.length) {
-        const dailyResponse = await WeatherService.getByDaily(dayResponse);
-        setDailyWeather(dailyResponse);
-      }
       setLoading(false);
     }
 
     test();
-  }, [whichCity, dailyWeather]);
-
-  const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: red;
-  `;
+  }, [whichCity]);
 
   return (
     <div className="main-container">
-      <div className="search-place">
-        <input type="text" className="city-input" id="input" onKeyPress={(e) => e.key === "Enter" && getCity()} />
-        <input type="button" className="city-button" value="&#128269;" onClick={getCity} />
-        <p>город: {current && current.name}</p> {/*  CITY IS HERE */}
-        <div className={loading ? "sweet-loading-show" : "sweet-loading"}>
-          <SyncLoader css={override} size={10} color={"#ffffff"} />
-        </div>
-      </div>
+      {(loading && "loading") || (
+        <div>
+          <div className="search-place">
+            <form name="searchCity" onSubmit={onSubmitCity}>
+              <input
+                name="cityInput"
+                type="text"
+                className="city-input"
+                id="input"
 
-      <div className="wrapper">
-        {current && (
-          <div>
+                // onKeyPress={(e) => e.key === "Enter" && onSubmitCity(e)}
+              />
+              <button type="submit" className="city-button">
+                <span role="img" aria-label="search">
+                  &#128269;{" "}
+                </span>
+              </button>
+            </form>
+            <p>город: {weatherInfo.dayInfo.city}</p> {/*  CITY IS HERE */}
+            <div className={loading ? "sweet-loading-show" : "sweet-loading"}>
+              <SyncLoader css={override} size={10} color={"#ffffff"} />
+            </div>
+          </div>
+
+          <div className="wrapper">
             <div className="main-info">
               <div>
-                <p className="temp"> {Math.ceil(current.main.temp)}°</p>
-                <p>По ощущениям: {Math.ceil(current.main.feels_like)} °</p>
+                <p className="temp"> {Math.ceil(weatherInfo.dayInfo.temperature)}°</p>
+                <p>По ощущениям: {Math.ceil(weatherInfo.dayInfo.feelsLike)} °</p>
               </div>
               <br />
               <br />
               <div className="clouds">
-                <h1> {translateClouds(current && current.weather[0].main)}</h1>
-                <p> {current && current.weather[0].description} </p>
+                <h1> {translateClouds(weatherInfo.dayInfo.clouds)}</h1>
+                <p> {weatherInfo.dayInfo.description} </p>
               </div>
               <br />
               <img
                 className="weather-img"
-                alt={current.weather[0].description}
-                src={`http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`}
+                alt=""
+                src={`http://openweathermap.org/img/wn/${weatherInfo.dayInfo.icon}@2x.png`}
               />
             </div>
+
+            <br />
           </div>
-        )}
-        <br />
-      </div>
-      <div className="down">
-        <div className="coords">
-          широта {current && current.coord.lon} <br />
-          долгота {current && current.coord.lat}
-          <br />
-          ветер {current && current.wind.speed}мс/c
-          <br />
-        </div>
-        <div>
-          <div className="btn-wrapper">
-            <NavLink exact to="/weather" activeClassName="active" className="day-btn">
-              почасовой
-            </NavLink>
-            <NavLink to="/old" activeClassName="active" className="day-btn">
-              по дням
-            </NavLink>
+          <div className="down">
+            <div className="coords">
+              широта {weatherInfo.dayInfo.lon} <br />
+              долгота {weatherInfo.dayInfo.lat}
+              <br />
+              ветер {weatherInfo.dayInfo.windSpeed}мс/c
+              <br />
+            </div>
+            <div>
+              <div className="btn-wrapper">
+                <NavLink exact to="/weather" activeClassName="active" className="day-btn">
+                  почасовой
+                </NavLink>
+                <NavLink to="/old" activeClassName="active" className="day-btn">
+                  по дням
+                </NavLink>
+              </div>
+              <Switch>
+                <Route exact path="/weather">
+                  <WeatherList list={weatherInfo.hourlyInfo} />
+                </Route>
+                <Route path="/old">
+                  <WeatherList list={weatherInfo.dailyInfo} />
+                </Route>
+              </Switch>
+            </div>
           </div>
-          <Switch>
-            <Route exact path="/weather">
-              <WeatherList list={fivedays} />
-            </Route>
-            <Route path="/old">
-              <WeatherList list={dailyWeather} />
-            </Route>
-          </Switch>
         </div>
-      </div>
+      )}
     </div>
   );
 };

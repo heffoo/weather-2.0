@@ -15,14 +15,38 @@ export default class WeatherService {
     return query;
   }
 
-  static async getByDay(whichCity) {
+  static async fetcha(options) {
+    const resp = await fetch(options);
+    if (!resp.ok) {
+      console.log(resp);
+      return false;
+    }
+    const json = await resp.json();
+    return json;
+  }
+
+  static async getDayByCity(whichCity) {
     const query = WeatherService.buildParams(whichCity);
 
     const dayResponse = await WeatherService.fetcha(`${apiUrl}${query}`);
-    return dayResponse;
+
+    const dayInfo = {
+      city: dayResponse.name,
+      clouds: dayResponse.weather[0].main,
+      lat: dayResponse.coord.lat,
+      lon: dayResponse.coord.lon,
+
+      temperature: dayResponse.main.temp,
+      feelsLike: dayResponse.main.feels_like,
+      windSpeed: dayResponse.wind.speed,
+      description: dayResponse.weather[0].description,
+      icon: dayResponse.weather[0].icon,
+    };
+
+    return dayInfo;
   }
 
-  static async getByHourly(whichCity) {
+  static async getHourlyByCity(whichCity) {
     const query = WeatherService.buildParams(whichCity);
     const hourlyResponse = await WeatherService.fetcha(`${apiUrlSecond}${query}`);
 
@@ -38,19 +62,7 @@ export default class WeatherService {
     return hourlyInfo;
   }
 
-  static async fetcha(options) {
-    const resp = await fetch(options);
-    if (!resp.ok) {
-      console.log(resp);
-      return false;
-    }
-    const json = await resp.json();
-    return json;
-  }
-
-  static async getByDaily(dayResponse) {
-    let lon = dayResponse.coord.lon;
-    let lat = dayResponse.coord.lat;
+  static async getDailyByCoords(lat, lon) {
     let params3 = { APPID, lat, lon, units: "metric", exclude: "hourly" };
     let query3 =
       "?" +
@@ -67,5 +79,17 @@ export default class WeatherService {
       };
     });
     return dailyInfo;
+  }
+  static async getAll(whichCity) {
+    const dayInfo = await WeatherService.getDayByCity(whichCity);
+
+    const hourlyInfo = await WeatherService.getHourlyByCity(whichCity);
+
+    const dailyInfo = await WeatherService.getDailyByCoords(dayInfo.lat, dayInfo.lon);
+    return {
+      dayInfo,
+      hourlyInfo,
+      dailyInfo,
+    };
   }
 }

@@ -13,9 +13,9 @@ export function formatTime(time) {
   });
 }
 
-let clouds;
+
 export function translateClouds(mainClouds) {
-  
+  let clouds;
   if (mainClouds === "Clouds") {
     clouds = "Облачно";
   } else if (mainClouds === "Rain") {
