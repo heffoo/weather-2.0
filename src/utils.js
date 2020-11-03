@@ -1,5 +1,3 @@
-
-
 export function formatDate(time) {
   return new Date(time * 1000).toLocaleString("ru", {
     month: "long",
@@ -12,7 +10,6 @@ export function formatTime(time) {
     minute: "numeric",
   });
 }
-
 
 export function translateClouds(mainClouds) {
   let clouds;
@@ -34,4 +31,4 @@ export function translateClouds(mainClouds) {
     clouds = mainClouds;
   }
   return clouds;
-};
+}

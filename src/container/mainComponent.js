@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { defaultCity } from "../config";
 import WeatherList from "../shared/weatherList/WeatherList";
-import { NavLink, Switch, Route } from "react-router-dom";
-import { css } from "@emotion/core";
-import SyncLoader from "react-spinners/SyncLoader";
+import { NavLink, Switch, Route, Redirect } from "react-router-dom";
+
 import WeatherService from "../services/weatherService";
-import { translateClouds } from "../utils";
 
 import "../container/mainComponent.scss";
+import { SearchForm } from "../shared/searchForm";
+import { Loader } from "../shared/weatherList/loader";
+import { MainCurrentWeather } from "../shared/mainCurrentInfo";
+import { DetailWeatherInfo } from "../shared/detailWeather";
 
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: red;
-`;
 const initState = { dayInfo: {}, hourlyInfo: {}, dailyInfo: {} };
 const Container = () => {
   const [whichCity, setCity] = useState(defaultCity);
@@ -24,15 +21,16 @@ const Container = () => {
     e.preventDefault();
     const form = document.forms.searchCity;
     setCity(form.elements.cityInput.value);
-
+    setLoading(true);
     form.elements.cityInput.value = "";
   };
-  console.log(whichCity);
+
   useEffect(() => {
     async function test() {
+      setLoading(true);
       try {
         const currentCityWeather = await WeatherService.getAll(whichCity);
-
+        setLoading(true);
         setAllWeather(currentCityWeather);
       } catch (e) {
         alert("123");
@@ -47,60 +45,15 @@ const Container = () => {
 
   return (
     <div className="main-container">
-      {(loading && "loading") || (
+      <Loader />
+      {(loading && "123") || (
         <div>
-          <div className="search-place">
-            <form name="searchCity" onSubmit={onSubmitCity}>
-              <input
-                name="cityInput"
-                type="text"
-                className="city-input"
-                id="input"
+          <SearchForm onSubmitCity={onSubmitCity} loading={loading} weatherInfo={weatherInfo} />
 
-                // onKeyPress={(e) => e.key === "Enter" && onSubmitCity(e)}
-              />
-              <button type="submit" className="city-button">
-                <span role="img" aria-label="search">
-                  &#128269;{" "}
-                </span>
-              </button>
-            </form>
-            <p>город: {weatherInfo.dayInfo.city}</p> {/*  CITY IS HERE */}
-            <div className={loading ? "sweet-loading-show" : "sweet-loading"}>
-              <SyncLoader css={override} size={10} color={"#ffffff"} />
-            </div>
-          </div>
+          <MainCurrentWeather weatherInfo={weatherInfo} />
 
-          <div className="wrapper">
-            <div className="main-info">
-              <div>
-                <p className="temp"> {Math.ceil(weatherInfo.dayInfo.temperature)}°</p>
-                <p>По ощущениям: {Math.ceil(weatherInfo.dayInfo.feelsLike)} °</p>
-              </div>
-              <br />
-              <br />
-              <div className="clouds">
-                <h1> {translateClouds(weatherInfo.dayInfo.clouds)}</h1>
-                <p> {weatherInfo.dayInfo.description} </p>
-              </div>
-              <br />
-              <img
-                className="weather-img"
-                alt=""
-                src={`http://openweathermap.org/img/wn/${weatherInfo.dayInfo.icon}@2x.png`}
-              />
-            </div>
-
-            <br />
-          </div>
           <div className="down">
-            <div className="coords">
-              широта {weatherInfo.dayInfo.lon} <br />
-              долгота {weatherInfo.dayInfo.lat}
-              <br />
-              ветер {weatherInfo.dayInfo.windSpeed}мс/c
-              <br />
-            </div>
+            <DetailWeatherInfo weatherInfo={weatherInfo} />
             <div>
               <div className="btn-wrapper">
                 <NavLink exact to="/weather" activeClassName="active" className="day-btn">
@@ -117,6 +70,7 @@ const Container = () => {
                 <Route path="/old">
                   <WeatherList list={weatherInfo.dailyInfo} />
                 </Route>
+                <Redirect from="/" to="/weather" />{" "}
               </Switch>
             </div>
           </div>
