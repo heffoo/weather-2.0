@@ -1,6 +1,6 @@
 import React from "react";
 
-import "../container/mainComponent.scss";
+import "./searchForm.scss";
 
 export function SearchForm({ onSubmitCity, weatherInfo }) {
   return (
