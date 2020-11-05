@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { defaultCity } from "../config";
-
+import { Loader } from "../shared/loader/loader";
+import { MainCurrentWeather } from "../shared/mainInfo/mainCurrentInfo";
 import WeatherService from "../services/weatherService";
 
 import "../container/mainComponent.scss";
-import { SearchForm } from "../shared/searchForm/searchForm";
-import { Loader } from "../shared/loader/loader";
-import { MainCurrentWeather } from "../shared/mainInfo/mainCurrentInfo";
+import { Modal } from "./modal";
 
 const initState = { dayInfo: {}, hourlyInfo: {}, dailyInfo: {} };
 const Container = () => {
   const [whichCity, setCity] = useState(defaultCity);
   const [loading, setLoading] = useState(true);
   const [weatherInfo, setAllWeather] = useState(initState);
+  const [isModalOpen, setModalIsOpen] = useState(false);
+  const [isError, setError] = useState();
 
   const onSubmitCity = (e) => {
     e.preventDefault();
@@ -27,11 +28,17 @@ const Container = () => {
       setLoading(true);
       try {
         const currentCityWeather = await WeatherService.getAll(whichCity);
-        setLoading(true);
-        setAllWeather(currentCityWeather);
+        if (currentCityWeather.ok === false) {
+          setError(currentCityWeather.status);
+          setModalIsOpen(true);
+          console.log(currentCityWeather.status);
+        } else {
+          setLoading(true);
+          setAllWeather(currentCityWeather);
+        }
       } catch (e) {
-        alert("123");
-        return;
+        console.log(e);
+        // alert("Такого города нет");
       }
 
       setLoading(false);
@@ -39,17 +46,16 @@ const Container = () => {
 
     test();
   }, [whichCity]);
-
+  console.log(whichCity);
   return (
     <div className="main-container">
-      
-    
       {(loading && <Loader />) || (
-        <div>  
-          <SearchForm onSubmitCity={onSubmitCity} loading={loading} weatherInfo={weatherInfo} />
-          <MainCurrentWeather weatherInfo={weatherInfo}  />
-        </div>
+        <>
+          <MainCurrentWeather weatherInfo={weatherInfo} loading={loading} onSubmitCity={onSubmitCity} />
+        </>
       )}
+
+      {isModalOpen && <Modal error={isError} isOpen={isModalOpen} setIsOpen={setModalIsOpen} />}
     </div>
   );
 };

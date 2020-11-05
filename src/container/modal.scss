@@ -1,0 +1,25 @@
+.modal {
+  height: 150px;
+  width: 200px;
+  background-color: #f3f3f3;
+  position: absolute;
+  z-index: 10;
+  top: 30%;
+  left: 35%;
+  border: 1px solid black;
+  box-shadow: 0 0 13px 4px gray;
+}
+.modal-container {
+  color: #333333;
+}
+
+.exit-modal-button {
+  color: #333333;
+  position: absolute;
+  right: 0;
+  font: {
+    size: 20px;
+  }
+  background-color: transparent;
+  border: 0;
+}

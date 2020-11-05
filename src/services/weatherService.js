@@ -17,10 +17,14 @@ export default class WeatherService {
 
   static async fetcha(options) {
     const resp = await fetch(options);
-    if (!resp.ok) {
-      console.log(resp);
-      return false;
+
+    if (resp.status === 404) {
+      console.log("incorrect city");
+      return resp;
+    } else if (!resp.ok) {
+      console.log("unknown error");
     }
+
     const json = await resp.json();
     return json;
   }
@@ -29,7 +33,9 @@ export default class WeatherService {
     const query = WeatherService.buildParams(whichCity);
 
     const dayResponse = await WeatherService.fetcha(`${apiUrl}${query}`);
-
+    if (dayResponse.ok === false) {
+      return dayResponse;
+    }
     const dayInfo = {
       city: dayResponse.name,
       clouds: dayResponse.weather[0].main,
@@ -82,7 +88,9 @@ export default class WeatherService {
   }
   static async getAll(whichCity) {
     const dayInfo = await WeatherService.getDayByCity(whichCity);
-
+    if (dayInfo.ok === false) {
+      return dayInfo;
+    }
     const hourlyInfo = await WeatherService.getHourlyByCity(whichCity);
 
     const dailyInfo = await WeatherService.getDailyByCoords(dayInfo.lat, dayInfo.lon);

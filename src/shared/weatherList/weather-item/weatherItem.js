@@ -8,14 +8,18 @@ import WeatherTemp from "./weatherTemp.js";
 import "./weatherItem.scss";
 
 export default function WeatherItem({ date, temperature, time, icon }) {
-  
   return (
     <div className="day-block">
       <div>
-        <WeatherDate time={date} />
-        <p>
-          <WeatherTemp temp={temperature} />
-        </p>
+        <div className="time">
+          <p>
+            <WeatherDate time={date} />
+          </p>
+
+          <p>
+            <WeatherTemp temp={temperature} />{" "}
+          </p>
+        </div>
       </div>
       {time && <WeatherHours time={time} />}
 

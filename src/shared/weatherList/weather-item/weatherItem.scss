@@ -6,14 +6,13 @@
 .day-block {
   width: 260px;
   height: 55px;
-
   border: {
     left: 1px solid white;
     bottom: 1px solid white;
   }
   border-radius: 8px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   &:first-child {
     border-radius: 0 0 0 8px;
     margin-top: 2px;
@@ -24,7 +23,13 @@
   width: 60px;
 }
 
-
+.time {
+padding-left: 20px;
+// padding-top: 5px;
+}
+.weather-pic {
+  padding-right: 20px;
+}
 // .day-block2 {
 //   @extend .day-block;
 //   justify-content: space-between;

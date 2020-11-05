@@ -2,19 +2,20 @@ import React from "react";
 import { translateClouds } from "../../utils";
 import WeatherList from "../weatherList/WeatherList";
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
+import { SearchForm } from "../searchForm/searchForm";
 
-import './mainCurrentInfo.scss'
-import { Loader } from "../loader/loader";
+import "./mainCurrentInfo.scss";
 
-export function MainCurrentWeather({ weatherInfo }) {
+export function MainCurrentWeather({ weatherInfo, onSubmitCity, loading }) {
   return (
     <div className="wrapper">
+      <SearchForm onSubmitCity={onSubmitCity} loading={loading} weatherInfo={weatherInfo} />
+
       <div className="main-info">
-    
-        <section>
+        <div>
           <p className="temp"> {Math.ceil(weatherInfo.dayInfo.temperature)}°</p>
           <p>По ощущениям: {Math.ceil(weatherInfo.dayInfo.feelsLike)} °</p>
-        </section>
+        </div>
         <br />
         <br />
         <div className="clouds">
@@ -39,12 +40,15 @@ export function MainCurrentWeather({ weatherInfo }) {
           ветер {weatherInfo.dayInfo.windSpeed}мс/c
           <br />
         </div>
+
         <div>
           <div className="btn-wrapper">
             <NavLink exact to="/weather" activeClassName="active" className="day-btn">
-               по часам 
+              по часам
             </NavLink>
-            <NavLink to="/old" activeClassName="active" className="day-btn"> по дням </NavLink>
+            <NavLink to="/old" activeClassName="active" className="day-btn">
+              по дням
+            </NavLink>
           </div>
           <Switch>
             <Route exact path="/weather">
