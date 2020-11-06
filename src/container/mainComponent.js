@@ -27,11 +27,11 @@ const Container = () => {
     async function test() {
       setLoading(true);
       try {
+        throw new Error("err");
         const currentCityWeather = await WeatherService.getAll(whichCity);
         if (currentCityWeather.ok === false) {
           setError(currentCityWeather.status);
           setModalIsOpen(true);
-          console.log(currentCityWeather.status);
         } else {
           setLoading(true);
           setAllWeather(currentCityWeather);
@@ -46,16 +46,22 @@ const Container = () => {
 
     test();
   }, [whichCity]);
-  console.log(whichCity);
+
   return (
     <div className="main-container">
       {(loading && <Loader />) || (
         <>
-          <MainCurrentWeather weatherInfo={weatherInfo} loading={loading} onSubmitCity={onSubmitCity} />
+          <MainCurrentWeather
+            isModalOpen={isModalOpen}
+            setModalIsOpen={setModalIsOpen}
+            weatherInfo={weatherInfo}
+            loading={loading}
+            onSubmitCity={onSubmitCity}
+          />
+
+          <Modal error={isError} isOpen={isModalOpen} setIsOpen={setModalIsOpen} />
         </>
       )}
-
-      {isModalOpen && <Modal error={isError} isOpen={isModalOpen} setIsOpen={setModalIsOpen} />}
     </div>
   );
 };

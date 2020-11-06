@@ -3,10 +3,15 @@ import { translateClouds } from "../../utils";
 import WeatherList from "../weatherList/WeatherList";
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 import { SearchForm } from "../searchForm/searchForm";
-
+import ErrorBoundary from "../../container/errorBoundary";
 import "./mainCurrentInfo.scss";
 
-export function MainCurrentWeather({ weatherInfo, onSubmitCity, loading }) {
+export function MainCurrentWeather({ weatherInfo, onSubmitCity, loading, setModalIsOpen, isModalOpen }) {
+  
+  if (!weatherInfo.dayInfo) {
+    setModalIsOpen(true);
+  }
+
   return (
     <div className="wrapper">
       <SearchForm onSubmitCity={onSubmitCity} loading={loading} weatherInfo={weatherInfo} />
@@ -51,13 +56,16 @@ export function MainCurrentWeather({ weatherInfo, onSubmitCity, loading }) {
             </NavLink>
           </div>
           <Switch>
-            <Route exact path="/weather">
-              <WeatherList list={weatherInfo.hourlyInfo} />
-            </Route>
-            <Route path="/old">
-              <WeatherList list={weatherInfo.dailyInfo} />
-            </Route>
-            <Redirect from="/" to="/weather" />
+            <ErrorBoundary>
+              <Route exact path="/weather">
+                <WeatherList setModalIsOpen={setModalIsOpen} list={weatherInfo.hourlyInfo} />
+              </Route>
+
+              <Route path="/old">
+                <WeatherList setModalIsOpen={setModalIsOpen} list={weatherInfo.dailyInfo} />
+              </Route>
+              <Redirect from="/" to="/weather" />
+            </ErrorBoundary>
           </Switch>
         </div>
       </div>

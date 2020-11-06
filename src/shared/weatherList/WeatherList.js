@@ -2,8 +2,14 @@ import React from "react";
 import WeatherItem from "./weather-item/weatherItem";
 
 import "./weatherList.scss";
+import ErrorBoundary from "../../container/errorBoundary";
 
-const WeatherList = ({ list = [] }) => {
+const WeatherList = ({ list = [], setModalIsOpen }) => {
+  if (!list.length) {
+    return;
+  }
+  // list = null;
+
   return (
     <section className="different-days-block">
       <div className="block-scroll-wrapper">
@@ -22,4 +28,5 @@ const WeatherList = ({ list = [] }) => {
     </section>
   );
 };
+
 export default WeatherList;

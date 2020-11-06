@@ -1,12 +1,15 @@
 import React from "react";
 import Container from "./container/mainComponent";
+import ErrorBoundary from "./container/errorBoundary";
 
 import "./App.scss";
 
 function App() {
   return (
     <div className="App">
-      <Container />
+     {/* <ErrorBoundary>  */}
+        <Container />
+  {/* </ErrorBoundary> */}
     </div>
   );
 }
