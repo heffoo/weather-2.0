@@ -41,7 +41,7 @@ export default class WeatherService {
       clouds: dayResponse.weather[0].main,
       lat: dayResponse.coord.lat,
       lon: dayResponse.coord.lon,
-
+      
       temperature: dayResponse.main.temp,
       feelsLike: dayResponse.main.feels_like,
       windSpeed: dayResponse.wind.speed,

@@ -27,7 +27,6 @@ const Container = () => {
     async function test() {
       setLoading(true);
       try {
-        throw new Error("err");
         const currentCityWeather = await WeatherService.getAll(whichCity);
         if (currentCityWeather.ok === false) {
           setError(currentCityWeather.status);
