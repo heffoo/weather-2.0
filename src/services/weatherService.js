@@ -1,4 +1,4 @@
-import { apiUrl, apiUrlSecond, apiUrlThird } from "../config";
+import { apiUrl, apiUrlSecond, apiUrlThird } from "../consts";
 import { formatDate, formatTime } from "../utils";
 
 const esc = encodeURIComponent;
@@ -15,7 +15,7 @@ export default class WeatherService {
     return query;
   }
 
-  static async fetcha(options) {
+  static async getForecast(options) {
     const resp = await fetch(options);
 
     if (resp.status === 404) {
@@ -32,7 +32,7 @@ export default class WeatherService {
   static async getDayByCity(whichCity) {
     const query = WeatherService.buildParams(whichCity);
 
-    const dayResponse = await WeatherService.fetcha(`${apiUrl}${query}`);
+    const dayResponse = await WeatherService.getForecast(`${apiUrl}${query}`);
     if (dayResponse.ok === false) {
       return dayResponse;
     }
@@ -54,7 +54,7 @@ export default class WeatherService {
 
   static async getHourlyByCity(whichCity) {
     const query = WeatherService.buildParams(whichCity);
-    const hourlyResponse = await WeatherService.fetcha(`${apiUrlSecond}${query}`);
+    const hourlyResponse = await WeatherService.getForecast(`${apiUrlSecond}${query}`);
 
     const hourlyInfo = hourlyResponse.list.map((el) => {
       return {
@@ -76,7 +76,7 @@ export default class WeatherService {
         .map((k) => esc(k) + "=" + esc(params3[k]))
         .join("&");
 
-    const dailyResponse = await WeatherService.fetcha(`${apiUrlThird}${query3}`);
+    const dailyResponse = await WeatherService.getForecast(`${apiUrlThird}${query3}`);
     const dailyInfo = dailyResponse.daily.map((el) => {
       return {
         iconName: el.weather[0].icon,
@@ -86,6 +86,7 @@ export default class WeatherService {
     });
     return dailyInfo;
   }
+
   static async getAll(whichCity) {
     const dayInfo = await WeatherService.getDayByCity(whichCity);
     if (dayInfo.ok === false) {

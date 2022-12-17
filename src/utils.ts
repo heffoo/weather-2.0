@@ -1,17 +1,17 @@
-export function formatDate(time) {
+export function formatDate(time: number) {
   return new Date(time * 1000).toLocaleString("ru", {
     month: "long",
     day: "numeric",
   });
 }
-export function formatTime(time) {
+export function formatTime(time: number) {
   return new Date(time * 1000).toLocaleString("ru", {
     hour: "numeric",
     minute: "numeric",
   });
 }
 
-export function translateClouds(mainClouds) {
+export function translateClouds(mainClouds: string) {
   let clouds;
   if (mainClouds === "Clouds") {
     clouds = "Облачно";

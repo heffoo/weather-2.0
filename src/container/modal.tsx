@@ -2,7 +2,13 @@ import React from "react";
 
 import "./modal.scss";
 
-export function Modal({ isOpen, setIsOpen, error }) {
+type ModalProps = {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  error: number; 
+}
+
+export function Modal({ isOpen, setIsOpen, error }: ModalProps) {
   if (isOpen) {
     return (
       <div className="modal">

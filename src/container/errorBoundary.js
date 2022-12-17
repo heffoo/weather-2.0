@@ -26,7 +26,7 @@ console.log(this.state.error)
 
     return (
       <div>
-        <h2>123</h2>
+        <h2>404</h2>
       </div>
     );
     // Normally, just render children

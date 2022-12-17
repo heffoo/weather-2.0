@@ -9,40 +9,14 @@
   // background: rgb(2, 0, 36);
   // background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(152, 152, 196, 1) 0%, rgba(0, 212, 255, 1) 100%);
 
-  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(188, 188, 222, 1) 0%, rgba(0, 212, 255, 1) 100%);
-}
-.main-info {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
-}
-.weather-img {
-  width: 120px;
-  height: 120px;
-}
-.weatherInfo {
-  display: flex;
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(188, 188, 222, 1) 0%,
+    rgba(0, 212, 255, 1) 100%
+  );
 }
 
-.temp {
-  font: {
-    size: 84px;
-  }
-}
-.clouds {
-  & h1 {
-    font: {
-      margin-left: 10px;
-      size: 34px;
-      weight: unset;
-    }
-  }
-}
-.coords {
-  display: flex;
-  align-items: center;
-  padding-left: 20px;
-}
 // soon
 .langbtns {
   position: absolute;

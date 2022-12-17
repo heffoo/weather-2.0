@@ -1,0 +1,36 @@
+.main-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.weather-img {
+  width: 120px;
+  height: 120px;
+}
+
+.weatherInfo {
+  display: flex;
+}
+
+.temp {
+  font: {
+    size: 84px;
+  }
+}
+
+.clouds {
+  & h1 {
+    font: {
+      margin-left: 10px;
+      size: 34px;
+      weight: unset;
+    }
+  }
+}
+
+.coords {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}

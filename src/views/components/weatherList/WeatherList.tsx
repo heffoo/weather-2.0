@@ -2,13 +2,18 @@ import React from "react";
 import WeatherItem from "./weather-item/weatherItem";
 
 import "./weatherList.scss";
-import ErrorBoundary from "../../container/errorBoundary";
+import ErrorBoundary from "../../../container/errorBoundary";
+import { WeatherListInfo } from "../../../types/weatherListInfo";
 
-const WeatherList = ({ list = [], setModalIsOpen }) => {
+type WeatherListProps = {
+  list: WeatherListInfo[];
+  setModalIsOpen: (modalIsOpen: boolean) => void
+}
+
+const WeatherList = ({ list = [], setModalIsOpen }: WeatherListProps) => {
   if (!list.length) {
     return;
   }
-  // list = null;
 
   return (
     <section className="different-days-block">

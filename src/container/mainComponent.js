@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { defaultCity } from "../config";
-import { Loader } from "../shared/loader/loader";
-import { MainCurrentWeather } from "../shared/mainInfo/mainCurrentInfo";
+import { defaultCity } from "../consts";
+import { Loader } from "../views/components/loader/loader";
+import { AppContainer } from "../views/appContainer";
 import WeatherService from "../services/weatherService";
 
 import "../container/mainComponent.scss";
 import { Modal } from "./modal";
 
 const initState = { dayInfo: {}, hourlyInfo: {}, dailyInfo: {} };
+
 const Container = () => {
-  const [whichCity, setCity] = useState(defaultCity);
+  const [desiredCity, setDesiredCity] = useState(defaultCity);
   const [loading, setLoading] = useState(true);
   const [weatherInfo, setAllWeather] = useState(initState);
   const [isModalOpen, setModalIsOpen] = useState(false);
@@ -18,16 +19,15 @@ const Container = () => {
   const onSubmitCity = (e) => {
     e.preventDefault();
     const form = document.forms.searchCity;
-    setCity(form.elements.cityInput.value);
+    setDesiredCity(form.elements.cityInput.value);
     setLoading(true);
     form.elements.cityInput.value = "";
   };
 
   useEffect(() => {
-    async function test() {
-      setLoading(true);
+    (async () => {
       try {
-        const currentCityWeather = await WeatherService.getAll(whichCity);
+        const currentCityWeather = await WeatherService.getAll(desiredCity);
         if (currentCityWeather.ok === false) {
           setError(currentCityWeather.status);
           setModalIsOpen(true);
@@ -36,21 +36,18 @@ const Container = () => {
           setAllWeather(currentCityWeather);
         }
       } catch (e) {
-        console.log(e);
-        // alert("Такого города нет");
+        alert("Проверьте подключение к интернету");
       }
 
       setLoading(false);
-    }
-
-    test();
-  }, [whichCity]);
+    })()
+  }, [desiredCity]);
 
   return (
     <div className="main-container">
       {(loading && <Loader />) || (
         <>
-          <MainCurrentWeather
+          <AppContainer
             isModalOpen={isModalOpen}
             setModalIsOpen={setModalIsOpen}
             weatherInfo={weatherInfo}
