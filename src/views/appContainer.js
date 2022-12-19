@@ -2,7 +2,7 @@ import React from "react";
 import WeatherList from "./components/weatherList/WeatherList";
 import { NavLink, Switch, Route, Redirect } from "react-router-dom";
 import { SearchForm } from "./components/searchForm/searchForm";
-import ErrorBoundary from "../container/errorBoundary";
+import ErrorBoundary from "../components/errorBoundary";
 import "./appContainer.scss";
 import MainInfo from "./components/mainInfo/MainInfo";
 import SideInfo from "./components/sideInfo/SideInfo";

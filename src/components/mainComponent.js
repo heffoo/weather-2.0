@@ -4,7 +4,7 @@ import { Loader } from "../views/components/loader/loader";
 import { AppContainer } from "../views/appContainer";
 import WeatherService from "../services/weatherService";
 
-import "../container/mainComponent.scss";
+import "./mainComponent.scss";
 import { Modal } from "./modal";
 
 const initState = { dayInfo: {}, hourlyInfo: {}, dailyInfo: {} };

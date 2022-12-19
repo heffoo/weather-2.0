@@ -2,7 +2,7 @@ import React from "react";
 import WeatherItem from "./weather-item/weatherItem";
 
 import "./weatherList.scss";
-import ErrorBoundary from "../../../container/errorBoundary";
+import ErrorBoundary from "../../../components/errorBoundary";
 import { WeatherListInfo } from "../../../types/weatherListInfo";
 
 type WeatherListProps = {
