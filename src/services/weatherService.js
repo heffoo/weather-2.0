@@ -25,8 +25,8 @@ export default class WeatherService {
       console.log("unknown error");
     }
 
-    const json = await resp.json();
-    return json;
+    const WeatherList = await resp.json();
+    return WeatherList;
   }
 
   static async getDayByCity(whichCity) {
@@ -84,6 +84,7 @@ export default class WeatherService {
         date: formatDate(el.dt),
       };
     });
+    
     return dailyInfo;
   }
 
@@ -95,6 +96,7 @@ export default class WeatherService {
     const hourlyInfo = await WeatherService.getHourlyByCity(whichCity);
 
     const dailyInfo = await WeatherService.getDailyByCoords(dayInfo.lat, dayInfo.lon);
+
     return {
       dayInfo,
       hourlyInfo,

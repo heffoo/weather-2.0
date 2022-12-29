@@ -1,11 +1,11 @@
 import React from "react";
 import { CurrentDayInfo } from "../../../types/currentDay";
 
-type MainInfoProps = {
+type DetailedInfoProps = {
   dayInfo: CurrentDayInfo;
 };
 
-const SideInfo = ({ dayInfo }: MainInfoProps) => {
+const DetailedInfo = ({ dayInfo }: DetailedInfoProps) => {
   return (
     <div className="coords">
       широта {dayInfo.lon} <br />
@@ -17,4 +17,4 @@ const SideInfo = ({ dayInfo }: MainInfoProps) => {
   );
 };
 
-export default SideInfo;
+export default DetailedInfo;

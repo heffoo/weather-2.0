@@ -7,7 +7,14 @@ import WeatherTemp from "./weatherTemp.js";
 
 import "./weatherItem.scss";
 
-export default function WeatherItem({ date, temperature, time, icon }) {
+type WeatherListItemProps = {
+  date: string;
+  temperature: number;
+  time?: string;
+  iconName: string; 
+}
+
+export default function WeatherItem({ date, temperature, time, iconName }: WeatherListItemProps) {
   return (
     <div className="day-block">
       <div>
@@ -23,7 +30,7 @@ export default function WeatherItem({ date, temperature, time, icon }) {
       </div>
       {time && <WeatherHours time={time} />}
 
-      <WeatherPicture icon={icon} />
+      <WeatherPicture icon={iconName} />
     </div>
   );
 }

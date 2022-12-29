@@ -1,6 +1,6 @@
-export interface WeatherListInfo {
+export interface WeatherHourlyInfo {
   date: string;
   iconName: string;
   temperature: number;
-  time: string;
+  time?: string;
 }
