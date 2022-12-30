@@ -10,14 +10,17 @@
   box-shadow: 0 0 13px 4px gray;
 }
 
-.modal-container {
+.errorMessage {
   color: #333333;
+  text-align: center;
+  margin: 20%;
 }
 
 .exit-modal-button {
   color: #333333;
   position: absolute;
-  right: 0;
+  top: 0;
+  right: 5px;
   font: {
     size: 20px;
   }

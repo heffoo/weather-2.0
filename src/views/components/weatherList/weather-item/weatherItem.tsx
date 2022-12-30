@@ -23,8 +23,8 @@ export default function WeatherItem({ date, temperature, time, iconName }: Weath
             <WeatherDate time={date} />
           </p>
 
-          <p>
-            <WeatherTemp temp={temperature} />{" "}
+          <p className="temperature">
+            <WeatherTemp temp={temperature} />
           </p>
         </div>
       </div>

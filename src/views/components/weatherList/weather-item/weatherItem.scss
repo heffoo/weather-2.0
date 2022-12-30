@@ -13,26 +13,29 @@
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
+
   &:first-child {
     border-radius: 0 0 0 8px;
     margin-top: 2px;
   }
 }
+
 .weather-block-img {
   height: 60px;
   width: 60px;
 }
 
 .time {
-padding-left: 20px;
-// padding-top: 5px;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+
+.temperature {
+  padding-top: 7px;
+}
+
 .weather-pic {
   padding-right: 20px;
 }
-// .day-block2 {
-//   @extend .day-block;
-//   justify-content: space-between;
-//   padding: 0 10px 0 10px;
-//   box-sizing: border-box;
-// }
